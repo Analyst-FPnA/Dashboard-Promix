@@ -34,6 +34,9 @@ if 'df_2205' not in locals():
       
         # Menggabungkan semua DataFrame menjadi satu
         df_2205 = pd.concat(df_list, ignore_index=True)
+
+st.title('Dashboard - Promix')
+
 list_bulan = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December']

@@ -34,5 +34,15 @@ if 'df_2205' not in locals():
       
         # Menggabungkan semua DataFrame menjadi satu
         df_2205 = pd.concat(df_list, ignore_index=True)
+list_bulan = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December']
 
-st.dataframe(df_2205)
+df_2205['Month'] = pd.Categorical(df_2205['Month'], categories=[x for x in list_bulan if x in df_2205['Month'].unique()], ordered=True)
+kategori = st.multiselect("KATEGORI:", ['All','BEVERAGES','DIMSUM','MIE'], default = ['All'])
+
+pivot1 = df_2205[df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Pelanggan','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Pelanggan',columns='Month',values='Kuantitas').reset_index()
+st.dataframe(pivot1, use_container_width=True, hide_index=True)
+
+pivot2 = df_2205[df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
+st.dataframe(pivot2, use_container_width=True, hide_index=True)

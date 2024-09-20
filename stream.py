@@ -12,6 +12,8 @@ import seaborn as sns
 import plotly.graph_objs as go
 import streamlit as st
 
+st.set_page_config(layout="wide")
+
 def download_file_from_google_drive(file_id, dest_path):
     if not os.path.exists(dest_path):
         url = f"https://drive.google.com/uc?id={file_id}"
@@ -45,7 +47,7 @@ df_2205['Month'] = pd.Categorical(df_2205['Month'], categories=[x for x in list_
 kategori = st.selectbox("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE'], index=0)
 
 pivot1 = df_2205[df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Pelanggan','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Pelanggan',columns='Month',values='Kuantitas').reset_index()
-st.dataframe(pivot1, use_container_width=True, hide_index=True)
+st.dataframe(pivot1.style.format(lambda x: '' if x==0 else x).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 
 pivot2 = df_2205[df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
 st.dataframe(pivot2, use_container_width=True, hide_index=True)

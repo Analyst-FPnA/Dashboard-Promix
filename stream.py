@@ -59,5 +59,5 @@ st.dataframe(pivot1.style.format(lambda x: '' if x==0 else format_number(x)).bac
 st.markdown('### ')
 cabang = st.selectbox("CABANG:", ['ALL']+pivot1['Nama Pelanggan'].unique().tolist(), index=0)
 
-pivot2 = df_2205[df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
+pivot2 = df_2205[(df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) & (df_2205['Nama Pelanggan'].isin(df_2205['Nama Pelanggan'].unique() if cabang=='ALL' else [cabang]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
 st.dataframe(pivot2.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)

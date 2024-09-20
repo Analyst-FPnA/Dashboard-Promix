@@ -42,7 +42,7 @@ list_bulan = [
         'July', 'August', 'September', 'October', 'November', 'December']
 
 df_2205['Month'] = pd.Categorical(df_2205['Month'], categories=[x for x in list_bulan if x in df_2205['Month'].unique()], ordered=True)
-kategori = st.multiselect("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE'], default = ['All'])
+kategori = st.multiselect("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE'], default = ['ALL'])
 
 pivot1 = df_2205[df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Pelanggan','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Pelanggan',columns='Month',values='Kuantitas').reset_index()
 st.dataframe(pivot1, use_container_width=True, hide_index=True)

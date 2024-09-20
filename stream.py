@@ -81,6 +81,9 @@ def format_number(x):
     if isinstance(x, (int, float)):
         return "{:,.0f}".format(x)
     return x
+    
+df_2205_can = df_2205[df_2205['Nota Status']      ==  'Cancel Nota']
+df_2205 = df_2205[df_2205['Nota Status']      !=  'Cancel Nota']
 
 pivot1 = df_2205[df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index()
 st.dataframe(pivot1.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
@@ -90,3 +93,12 @@ cabang = st.selectbox("CABANG:", ['ALL']+df_2205['Nama Cabang'].unique().tolist(
 
 pivot2 = df_2205[(df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) & (df_2205['Nama Cabang'].isin(df_2205['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
 st.dataframe(pivot2.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)
+
+st.markdown('## Cancel Nota')
+pivot1_can = df_2205_can[df_2205_can['Master Kategori'].isin((df_2205_can['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index()
+st.dataframe(pivot1_can.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
+
+st.markdown('### ')
+
+pivot2_can = df_2205_can[(df_2205_can['Master Kategori'].isin((df_2205_can['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) & (df_2205_can['Nama Cabang'].isin(df_2205_can['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
+st.dataframe(pivot2_can.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)

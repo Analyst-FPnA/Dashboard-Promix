@@ -88,7 +88,7 @@ def format_number(x):
 
 pivot1 = df_2205[df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index()
 total = pd.DataFrame((pivot1.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
-total['Nama Cabang']='TOTAL'+(pivot1['Nama Cabang'].str.len().max()+20)*' '
+total['Nama Cabang']='TOTAL'+(pivot1['Nama Cabang'].str.len().max()+25)*' '
 
 st.dataframe(pd.concat([pivot1,total])[:-1].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 st.dataframe(pd.concat([pivot1,total])[-1:], use_container_width=True, hide_index=True)
@@ -98,7 +98,7 @@ cabang = st.selectbox("CABANG:", ['ALL']+df_2205['Nama Cabang'].unique().tolist(
 
 pivot2 = df_2205[(df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) & (df_2205['Nama Cabang'].isin(df_2205['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
 total = pd.DataFrame((pivot2.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot2.columns)-1),columns=pivot2.columns[1:])
-total['Nama Barang']='TOTAL'+(pivot2['Nama Barang'].str.len().max()+20)*' '
+total['Nama Barang']='TOTAL'+(pivot2['Nama Barang'].str.len().max()+12)*' '
 st.dataframe(pd.concat([pivot2,total])[:-1].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)
 st.dataframe(pd.concat([pivot2,total])[-1:], use_container_width=True, hide_index=True)
 
@@ -106,7 +106,7 @@ st.markdown('### ')
 st.markdown('## Cancel Nota')
 pivot1_can = df_2205_can[df_2205_can['Master Kategori'].isin((df_2205_can['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index()
 total = pd.DataFrame((pivot1_can.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1_can.columns)-1),columns=pivot1_can.columns[1:])
-total['Nama Cabang']='TOTAL'+(pivot1_can['Nama Cabang'].str.len().max()+20)*' '
+total['Nama Cabang']='TOTAL'+(pivot1_can['Nama Cabang'].str.len().max()+25)*' '
 
 st.dataframe(pd.concat([pivot1_can,total])[:-1].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1_can.columns[1:]), use_container_width=True, hide_index=True)
 st.dataframe(pd.concat([pivot1_can,total])[-1:], use_container_width=True, hide_index=True)
@@ -114,6 +114,6 @@ st.dataframe(pd.concat([pivot1_can,total])[-1:], use_container_width=True, hide_
 st.markdown('### ')
 pivot2_can = df_2205_can[(df_2205_can['Master Kategori'].isin((df_2205_can['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) & (df_2205_can['Nama Cabang'].isin(df_2205_can['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
 total = pd.DataFrame((pivot2_can.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot2_can.columns)-1),columns=pivot2_can.columns[1:])
-total['Nama Barang']='TOTAL'+(pivot2_can['Nama Barang'].str.len().max()+20)*' '
+total['Nama Barang']='TOTAL'+(pivot2_can['Nama Barang'].str.len().max()+12)*' '
 st.dataframe(pd.concat([pivot2_can,total])[:-1].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2_can.columns[1:]), use_container_width=True, hide_index=True)
 st.dataframe(pd.concat([pivot2_can,total])[-1:], use_container_width=True, hide_index=True)

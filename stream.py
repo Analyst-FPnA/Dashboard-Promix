@@ -50,18 +50,25 @@ download_file_from_google_drive(file_id, dest_path)
 
 if 'df_2205' not in locals():
     with zipfile.ZipFile(f'downloaded_file.zip', 'r') as z:
-        df_list = []
+        dfs = []
+        dfs_can = [] 
         for file_name in z.namelist():
           # Memeriksa apakah file tersebut berformat CSV
-          if file_name.endswith('.csv'):
+          if file_name.endswith('Promix.csv'):
               # Membaca file CSV ke dalam DataFrame
               with z.open(file_name) as f:
                   df = pd.read_csv(f)
-                  df_list.append(df)
+                  dfs.append(df)
+          if file_name.endswith('Cancel Nota.csv'):
+              # Membaca file CSV ke dalam DataFrame
+              with z.open(file_name) as f:
+                  df = pd.read_csv(f)
+                  dfs_can.append(df)
       
         # Menggabungkan semua DataFrame menjadi satu
-        df_2205 = pd.concat(df_list, ignore_index=True)
-
+        df_2205 = pd.concat(dfs, ignore_index=True)
+        df_2205_can = pd.concat(dfs_can, ignore_index=True)
+        
 st.title('Dashboard - Promix')
 
 list_bulan = [
@@ -73,6 +80,10 @@ df_2205['Month'] = pd.Categorical(df_2205['Month'], categories=[x for x in list_
 df_2205['Cabang'] = df_2205['Nama Pelanggan'].str.extract(r'\(([^()]*)\)[^()]*$')[0].values
 df_2205 = df_2205.merge(df_cab[['Cabang','Nama Cabang']],how='left')
 
+df_2205_can['Month'] = pd.Categorical(df_2205_can['Month'], categories=[x for x in list_bulan if x in df_2205['Month'].unique()], ordered=True)
+df_2205_can['Cabang'] = df_2205_can['Nama Pelanggan'].str.extract(r'\(([^()]*)\)[^()]*$')[0].values
+df_2205_can = df_2205_can.merge(df_cab[['Cabang','Nama Cabang']],how='left')
+
 kategori = st.selectbox("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE'], index=0)
 
 def format_number(x):
@@ -82,8 +93,6 @@ def format_number(x):
         return "{:,.0f}".format(x)
     return x
     
-df_2205_can = df_2205[df_2205['Nota Status']      ==  'Cancel Nota']
-df_2205 = df_2205[df_2205['Nota Status']      !=  'Cancel Nota']
 
 pivot1 = df_2205[df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index()
 st.dataframe(pivot1.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
@@ -93,12 +102,8 @@ cabang = st.selectbox("CABANG:", ['ALL']+df_2205['Nama Cabang'].unique().tolist(
 
 pivot2 = df_2205[(df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) & (df_2205['Nama Cabang'].isin(df_2205['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
 st.dataframe(pivot2.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)
-
-st.markdown('## Cancel Nota')
-pivot1_can = df_2205_can[df_2205_can['Master Kategori'].isin((df_2205_can['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index()
-st.dataframe(pivot1_can.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
-
 st.markdown('### ')
 
-pivot2_can = df_2205_can[(df_2205_can['Master Kategori'].isin((df_2205_can['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) & (df_2205_can['Nama Cabang'].isin(df_2205_can['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
-st.dataframe(pivot2_can.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)
+st.markdown('### Cancel Nota')
+pivot1_can = df_2205_can.groupby(['Nama Cabang','Month'])[['Nomor #']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Nomor #').reset_index()
+st.dataframe(pivot1_can.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)

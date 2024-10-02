@@ -60,8 +60,7 @@ if 'df_2205' not in locals():
                   df_list.append(df)
       
         # Menggabungkan semua DataFrame menjadi satu
-        df_2205 = pd.concat(dfs, ignore_index=True)
-        df_2205_can = pd.concat(dfs_can, ignore_index=True)
+        df_2205 = pd.concat(df_list, ignore_index=True)
         
 st.title('Dashboard - Promix')
 

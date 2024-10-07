@@ -74,7 +74,6 @@ list_bulan = [
 df_cab = pd.read_csv('daftar_gudang.csv')
 
 df_cancelnota['Month'] = pd.Categorical(df_cancelnota['Month'], categories=[x for x in list_bulan if x in df_cancelnota['Month'].unique()], ordered=True)
-df_cancelnota['Cabang'] = df_cancelnota['Nama Pelanggan'].str.extract(r'\(([^()]*)\)[^()]*$')[0].values
 df_cancelnota = df_cancelnota.merge(df_cab[['Cabang','Nama Cabang']],how='left')
 
 df_2205['Month'] = pd.Categorical(df_2205['Month'], categories=[x for x in list_bulan if x in df_2205['Month'].unique()], ordered=True)

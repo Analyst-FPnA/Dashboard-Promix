@@ -54,7 +54,7 @@ if 'df_2205' not in locals():
         for file_name in z.namelist():
           # Memeriksa apakah file tersebut berformat CSV
           if file_name.endswith('nota.csv'):
-              with .open(file_name) as f:
+              with z.open(file_name) as f:
                   df_cancelnota = pd.read_csv(f)
           elif file_name.endswith('.csv'):
               # Membaca file CSV ke dalam DataFrame

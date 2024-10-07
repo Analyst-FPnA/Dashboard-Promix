@@ -111,9 +111,10 @@ st.dataframe(pd.concat([pivot2,total])[:-1].style.format(lambda x: '' if x==0 el
 st.dataframe(pd.concat([pivot2,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)
 
 
-kategori_cn = st.selectbox("TOTAL CANCELNOTA:", ['ITEM','NOMOR','NOM'], index=0)
+
 st.markdown('### ')
-st.markdown('## Cancel Nota
+st.markdown('## Cancel Nota')
+kategori_cn = st.selectbox("TOTAL CANCELNOTA:", ['ITEM','NOMOR','NOM'], index=0)
 if kategori_cn=='ITEM':
     pivot1_can = df_2205_can[df_2205_can['Master Kategori'].isin((df_2205_can['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index()
 elif kategori=='NOMOR':

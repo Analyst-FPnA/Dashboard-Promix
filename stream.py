@@ -119,7 +119,7 @@ if kategori_cn=='ITEM':
 elif kategori_cn=='NOMOR':
     pivot1_can = df_cancelnota.pivot(index='Nama Cabang',columns='Month',values='Nomor #').reset_index().fillna(0)
 elif kategori_cn=='NOM':
-    pivot1_can = df_cancelnota.pivot(index='Nama Cabang',columns='Month',values='Total Harga').reset_index()
+    pivot1_can = df_cancelnota.pivot(index='Nama Cabang',columns='Month',values='Total Harga').reset_index().fillna(0)
     
 total = pd.DataFrame((pivot1_can.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1_can.columns)-1),columns=pivot1_can.columns[1:])    
 total['Nama Cabang']='TOTAL'+(pivot1_can['Nama Cabang'].str.len().max()+25)*' '

@@ -53,7 +53,10 @@ if 'df_2205' not in locals():
         df_list = []
         for file_name in z.namelist():
           # Memeriksa apakah file tersebut berformat CSV
-          if file_name.endswith('.csv'):
+          if file_name.endswith('nota.csv'):
+              with .open(file_name) as f:
+                  df_cancelnota = pd.read_csv(f)
+          elif file_name.endswith('.csv'):
               # Membaca file CSV ke dalam DataFrame
               with z.open(file_name) as f:
                   df = pd.read_csv(f)
@@ -69,6 +72,11 @@ list_bulan = [
         'July', 'August', 'September', 'October', 'November', 'December']
 
 df_cab = pd.read_csv('daftar_gudang.csv')
+
+df_cancelnota['Month'] = pd.Categorical(df_cancelnota['Month'], categories=[x for x in list_bulan if x in df_cancelnota['Month'].unique()], ordered=True)
+df_cancelnota['Cabang'] = df_cancelnota['Nama Pelanggan'].str.extract(r'\(([^()]*)\)[^()]*$')[0].values
+df_cancelnota = df_cancelnota.merge(df_cab[['Cabang','Nama Cabang']],how='left')
+
 df_2205['Month'] = pd.Categorical(df_2205['Month'], categories=[x for x in list_bulan if x in df_2205['Month'].unique()], ordered=True)
 df_2205['Cabang'] = df_2205['Nama Pelanggan'].str.extract(r'\(([^()]*)\)[^()]*$')[0].values
 df_2205 = df_2205.merge(df_cab[['Cabang','Nama Cabang']],how='left')
@@ -102,12 +110,18 @@ total['Nama Barang']='TOTAL'+(pivot2['Nama Barang'].str.len().max()+12)*' '
 st.dataframe(pd.concat([pivot2,total])[:-1].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)
 st.dataframe(pd.concat([pivot2,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)
 
-st.markdown('### ')
-st.markdown('## Cancel Nota')
-pivot1_can = df_2205_can[df_2205_can['Master Kategori'].isin((df_2205_can['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index()
-total = pd.DataFrame((pivot1_can.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1_can.columns)-1),columns=pivot1_can.columns[1:])
-total['Nama Cabang']='TOTAL'+(pivot1_can['Nama Cabang'].str.len().max()+25)*' '
 
+kategori_cn = st.selectbox("TOTAL CANCELNOTA:", ['ITEM','NOMOR','NOM'], index=0)
+st.markdown('### ')
+st.markdown('## Cancel Nota
+if kategori_cn=='ITEM':
+    pivot1_can = df_2205_can[df_2205_can['Master Kategori'].isin((df_2205_can['Master Kategori'].unique() if kategori=='ALL' else [kategori]))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index()
+elif kategori=='NOMOR':
+    pivot1_can = df_cancelnota.pivot(index='Nama Cabang',columns='Month',values='Nomor #').reset_index()
+elif kategori=='NOMOR':
+    pivot1_can = df_cancelnota.pivot(index='Nama Cabang',columns='Month',values='Total Harga').reset_index()
+total = pd.DataFrame((pivot1_can.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1_can.columns)-1),columns=pivot1_can.columns[1:])    
+total['Nama Cabang']='TOTAL'+(pivot1_can['Nama Cabang'].str.len().max()+25)*' '
 st.dataframe(pd.concat([pivot1_can,total])[:-1].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1_can.columns[1:]), use_container_width=True, hide_index=True)
 st.dataframe(pd.concat([pivot1_can,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1_can.columns[1:]), use_container_width=True, hide_index=True)
 

@@ -127,7 +127,7 @@ else:
     st.dataframe(pd.concat([pivot1,total])[:-1].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
     st.dataframe(pd.concat([pivot1,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 
-st.markdown('### ')
+st.markdown('### Sales - Paket ')
 total2 = st.selectbox("TOTAL:", ['KUANTITAS','HARGA'], index=0)
 df_paket['Month'] = pd.Categorical(df_paket['Month'], categories=[x for x in list_bulan if x in df_paket['Month'].unique()], ordered=True)
 df_paket = df_paket.pivot(index='Nama Barang',columns='Month',values='Kuantitas' if total2=='KUANTITAS' else 'Total Harga').reset_index()

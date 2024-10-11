@@ -78,7 +78,7 @@ df_cancelnota['Month'] = pd.Categorical(df_cancelnota['Month'], categories=[x fo
 df_cancelnota = df_cancelnota.merge(df_cab[['Cabang','Nama Cabang']],how='left')
 
 df_2205['Month'] = pd.Categorical(df_2205['Month'], categories=[x for x in list_bulan if x in df_2205['Month'].unique()], ordered=True)
-df_2205 = df_2205.merge(df_cab[['Cabang','Nama Cabang']],how='left')
+df_2205 = df_2205.merge(df_cab[['Cabang','Nama Cabang']],how='left').fillna('')
 
 
 sales = st.selectbox("SALES/CANCEL NOTA:", ['SALES','CANCEL NOTA'], index=0)
@@ -94,7 +94,7 @@ def format_number(x):
     return x
     
 if (total=='KUANTITAS'):
-    pivot1 = df_2205[(df_2205.fillna('')['Nota Status'] == ('Cancel Nota' if sales=='CANCEL NOTA' else '')) & (df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique().tolist() if kategori=='ALL' else [kategori]))) &
+    pivot1 = df_2205[(df_2205['Nota Status'] == ('Cancel Nota' if sales=='CANCEL NOTA' else '')) & (df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique().tolist() if kategori=='ALL' else [kategori]))) &
                 (df_2205['Status'].isin((df_2205['Status'].unique().tolist() if status=='ALL' else [status])))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index().fillna(0)
     total = pd.DataFrame((pivot1.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
     #total['Nama Cabang']='TOTAL'+(pivot1['Nama Cabang'].str.len().max()+25)*' '

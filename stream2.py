@@ -78,7 +78,8 @@ df_cancelnota['Month'] = pd.Categorical(df_cancelnota['Month'], categories=[x fo
 df_cancelnota = df_cancelnota.merge(df_cab[['Cabang','Nama Cabang']],how='left')
 
 df_2205['Month'] = pd.Categorical(df_2205['Month'], categories=[x for x in list_bulan if x in df_2205['Month'].unique()], ordered=True)
-df_2205 = df_2205.merge(df_cab[['Cabang','Nama Cabang']],how='left').fillna('')
+df_2205 = df_2205.merge(df_cab[['Cabang','Nama Cabang']],how='left')
+df_2205['Nota Status'] = df_2205['Nota Status'].fillna('')
 
 
 sales = st.selectbox("SALES/CANCEL NOTA:", ['SALES','CANCEL NOTA'], index=0)

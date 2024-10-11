@@ -94,7 +94,7 @@ def format_number(x):
     return x
     
 if (total=='KUANTITAS'):
-    pivot1 = df_2205[(df_2205[df_2205['Nota Status'] == ('Cancel Nota' if sales=='CANCEL NOTA' else '')]) & (df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) &
+    pivot1 = df_2205[(df_2205['Nota Status'] == ('Cancel Nota' if sales=='CANCEL NOTA' else '')) & (df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) &
                 (df_2205['Status'].isin((df_2205['Status'].unique() if status=='ALL' else [status])))].groupby(['Nama Cabang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Kuantitas').reset_index()
     total = pd.DataFrame((pivot1.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
     total['Nama Cabang']='TOTAL'+(pivot1['Nama Cabang'].str.len().max()+25)*' '
@@ -105,7 +105,7 @@ if (total=='KUANTITAS'):
     st.markdown('### ')
     cabang = st.selectbox("CABANG:", ['ALL']+df_2205['Nama Cabang'].unique().tolist(), index=0)
     
-    pivot2 = df_2205[(df_2205[df_2205['Nota Status'] == ('Cancel Nota' if sales=='CANCEL NOTA' else '')]) & (df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) &
+    pivot2 = df_2205[(df_2205['Nota Status'] == ('Cancel Nota' if sales=='CANCEL NOTA' else '')) & (df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) &
                 (df_2205['Status'].isin((df_2205['Status'].unique() if status=='ALL' else [status]))) & (df_2205['Nama Cabang'].isin(df_2205['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()
     total = pd.DataFrame((pivot2.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot2.columns)-1),columns=pivot2.columns[1:])
     total['Nama Barang']='TOTAL'+(pivot2['Nama Barang'].str.len().max()+12)*' '

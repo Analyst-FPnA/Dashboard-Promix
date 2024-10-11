@@ -81,7 +81,7 @@ df_2205['Month'] = pd.Categorical(df_2205['Month'], categories=[x for x in list_
 df_2205 = df_2205.merge(df_cab[['Cabang','Nama Cabang']],how='left')
 df_2205['Nota Status'] = df_2205['Nota Status'].fillna('')
 
-col = st.column(2)
+col = st.columns(2)
 with col[0]:
     sales = st.selectbox("SALES/CANCEL NOTA:", ['SALES','CANCEL NOTA'], index=0)
     total = st.selectbox("TOTAL:", ['KUANTITAS'] if sales == 'SALES' else ['KUANTITAS','NOMOR','HARGA'], index=0)

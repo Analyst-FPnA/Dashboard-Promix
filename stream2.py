@@ -64,7 +64,7 @@ if 'df_2205' not in locals():
       
         # Menggabungkan semua DataFrame menjadi satu
         df_2205 = pd.concat(df_2205, ignore_index=True)
-        df_2205 = pd.concat(df_cancelnota, ignore_index=True)
+        df_cancelnota = pd.concat(df_cancelnota, ignore_index=True)
         
 st.title('Dashboard - Promix')
 

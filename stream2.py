@@ -52,6 +52,7 @@ if 'df_2205' not in locals():
     with zipfile.ZipFile(f'downloaded_file.zip', 'r') as z:
         df_2205 = []
         df_cancelnota = []
+        df_paket = []
         for file_name in z.namelist():
           # Memeriksa apakah file tersebut berformat CSV
           if file_name.startswith('Cancel'):
@@ -61,10 +62,15 @@ if 'df_2205' not in locals():
               # Membaca file CSV ke dalam DataFrame
               with z.open(file_name) as f:
                   df_2205.append(pd.read_csv(f))
+          elif file_name.startswith('Paket'):
+              # Membaca file CSV ke dalam DataFrame
+              with z.open(file_name) as f:
+                  df_paket.append(pd.read_csv(f))
       
         # Menggabungkan semua DataFrame menjadi satu
         df_2205 = pd.concat(df_2205, ignore_index=True)
         df_cancelnota = pd.concat(df_cancelnota, ignore_index=True)
+        df_paket = pd.concat(df_paket, ignore_index=True)
         
 st.title('Dashboard - Promix')
 
@@ -121,4 +127,9 @@ else:
     st.dataframe(pd.concat([pivot1,total])[:-1].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
     st.dataframe(pd.concat([pivot1,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 
+st.markdown('### ')
+total2 = st.selectbox("TOTAL:", ['KUANTITAS','HARGA'], index=0)
+df_paket['Month'] = pd.Categorical(df_paket['Month'], categories=[x for x in list_bulan if x in df_paket['Month'].unique()], ordered=True)
+df_paket = df_paket.pivot(index='Nama Barang',columns='Month',values=total2)
+st.dataframe(df_paket.style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 

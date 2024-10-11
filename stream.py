@@ -86,14 +86,14 @@ df_cancelnota = df_cancelnota.merge(df_cab[['Cabang','Nama Cabang']],how='left')
 df_2205['Month'] = pd.Categorical(df_2205['Month'], categories=[x for x in list_bulan if x in df_2205['Month'].unique()], ordered=True)
 df_2205 = df_2205.merge(df_cab[['Cabang','Nama Cabang']],how='left')
 df_2205['Nota Status'] = df_2205['Nota Status'].fillna('')
-
+df_2205['Status'] = df_2205['Status'].replace({'ONLINE/OFFLINE':'TAKE AWAY'})
 col = st.columns(2)
 with col[0]:
     sales = st.selectbox("SALES/CANCEL NOTA:", ['SALES','CANCEL NOTA'], index=0)
     total = st.selectbox("TOTAL:", ['KUANTITAS'] if sales == 'SALES' else ['KUANTITAS','NOMOR','HARGA'], index=0)
 with col[1]:
     kategori = st.selectbox("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE'] if total=='KUANTITAS' else ['ALL'], index=0)
-    status = st.selectbox("STATUS:", ['ALL','DINE IN','TAKE AWAY','ONLINE/OFFLINE'] if total=='KUANTITAS' else ['ALL'], index=0)
+    status = st.selectbox("STATUS:", ['ALL','DINE IN','TAKE AWAY'] if total=='KUANTITAS' else ['ALL'], index=0)
 
 def format_number(x):
     if x==0:

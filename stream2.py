@@ -103,7 +103,7 @@ if (total=='KUANTITAS'):
     st.dataframe(pd.concat([pivot1,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 
     st.markdown('### ')
-    cabang = st.selectbox("CABANG:", ['ALL']+df_2205['Nama Cabang'].unique(), index=0)
+    cabang = st.selectbox("CABANG:", ['ALL']+df_2205['Nama Cabang'].unique().tolist(), index=0)
     
     pivot2 = df_2205[(df_2205['Nota Status'] == ('Cancel Nota' if sales=='CANCEL NOTA' else '')) & (df_2205['Master Kategori'].isin((df_2205['Master Kategori'].unique() if kategori=='ALL' else [kategori]))) &
                 (df_2205['Status'].isin((df_2205['Status'].unique() if status=='ALL' else [status]))) & (df_2205['Nama Cabang'].isin(df_2205['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['Nama Barang','Month'])[['Kuantitas']].sum().reset_index().pivot(index='Nama Barang',columns='Month',values='Kuantitas').reset_index()

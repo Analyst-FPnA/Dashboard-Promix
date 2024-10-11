@@ -84,7 +84,7 @@ df_2205 = df_2205.merge(df_cab[['Cabang','Nama Cabang']],how='left')
 sales = st.selectbox("SALES/CANCEL NOTA:", ['SALES','CANCEL NOTA'], index=0)
 total = st.selectbox("TOTAL:", ['KUANTITAS'] if sales == 'SALES' else ['KUANTITAS','NOMOR','HARGA'], index=0)
 kategori = st.selectbox("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE'] if total=='KUANTITAS' else ['ALL'], index=0)
-status = st.selectbox("STATUS:", ['ALL','DINE IN','TAKE AWAY','ONLINE/OFFLINE'] if kategori=='KUANTITAS' else ['ALL'], index=0)
+status = st.selectbox("STATUS:", ['ALL','DINE IN','TAKE AWAY','ONLINE/OFFLINE'] if total=='KUANTITAS' else ['ALL'], index=0)
 
 def format_number(x):
     if x==0:

@@ -126,7 +126,7 @@ if (total=='KUANTITAS'):
     st.dataframe(pd.concat([pivot1,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
     for month in total.columns.drop(['Nama Cabang']):
         total[month]=total[month][0] / days_in_month[month]
-    total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max()+25)*' '
+    total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max()+22)*' '
     st.dataframe(pd.concat([pivot1,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 else:
     pivot1 = df_cancelnota.groupby(['Nama Cabang','Month'])[['Nomor #' if total=='NOMOR' else 'Total Harga']].sum().reset_index().pivot(index='Nama Cabang',columns='Month',values='Nomor #' if total=='NOMOR' else 'Total Harga').reset_index().fillna(0)
@@ -136,7 +136,7 @@ else:
     st.dataframe(pd.concat([pivot1,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
     for month in total.columns.drop(['Nama Cabang']):
         total[month]=total[month][0] / days_in_month[month]
-    total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max()+25)*' '
+    total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max()+20)*' '
     st.dataframe(pd.concat([pivot1,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 
 st.markdown('### ')
@@ -150,7 +150,7 @@ st.dataframe(pd.concat([pivot2,total])[:-1].style.format(lambda x: '' if x==0 el
 st.dataframe(pd.concat([pivot2,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)
 for month in total.columns.drop(['Nama Barang']):
     total[month]=total[month][0] / days_in_month[month]
-total['Nama Barang']='AVG DAILY'+(pivot2['Nama Barang'].str.len().max()+12)*' '
+total['Nama Barang']='AVG DAILY'+(pivot2['Nama Barang'].str.len().max()+8)*' '
 st.dataframe(pd.concat([pivot2,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 
 

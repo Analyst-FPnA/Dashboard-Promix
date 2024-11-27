@@ -67,7 +67,7 @@ if 'df_item' not in locals():
         df_paket = pd.concat(df_paket, ignore_index=True)
         
 st.title('Dashboard - Promix (WEBSMART)')
-kategori = st.selectbox("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE','PACKAGING'] if total=='KUANTITAS' else ['ALL'], index=0)
+kategori = st.selectbox("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE','PACKAGING'], index=0)
 days_in_month = {
     'January': 31,
     'February': 28,  # untuk tahun non-kabisat

@@ -92,7 +92,6 @@ df_item['Tanggal'] = pd.to_datetime(df_item['BULAN'], format='%B %Y')
 df_item['BULAN'] = pd.Categorical(df_item['BULAN'], categories=df_item.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
 
 
-
 def format_number(x):
     if x==0:
         return ''
@@ -111,7 +110,7 @@ total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max()+22)*' '
 st.dataframe(pd.concat([pivot1,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 
 st.markdown('### ')
-cabang = st.selectbox("CABANG:", ['ALL']+df_2205['Nama Cabang'].unique().tolist(), index=0)
+cabang = st.selectbox("CABANG:", ['ALL']+df_item['Nama Cabang'].unique().tolist(), index=0)
 
 pivot2 = df_item[(df_item['Nama Cabang'].isin(df_item['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['BULAN','NAMA BARANG'])[['Kuantitas']].sum().reset_index().pivot(index='NAMA BARANG', columns='BULAN', values='Kuantitas')
 total = pd.DataFrame((pivot2.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot2.columns)-1),columns=pivot2.columns[1:])

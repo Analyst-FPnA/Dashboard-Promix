@@ -112,6 +112,7 @@ total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max()+22)*' '
 st.dataframe(pd.concat([pivot1,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 
 st.markdown('### ')
+st.markdown('### Sales per Item')
 cabang = st.selectbox("CABANG:", ['ALL']+df_item['Nama Cabang'].unique().tolist(), index=0)
 
 pivot2 = df_item[(df_item['Nama Cabang'].isin(df_item['Nama Cabang'].unique() if cabang=='ALL' else [cabang])) & (df_item['Master Kategori'].isin((df_item['Master Kategori'].unique() if kategori=='ALL' else [kategori])))].groupby(['BULAN','NAMA BARANG'])[['Kuantitas']].sum().reset_index().pivot(index='NAMA BARANG', columns='BULAN', values='Kuantitas').reset_index().fillna(0)
@@ -124,7 +125,8 @@ for month in total.columns.drop(['NAMA BARANG']):
 total['NAMA BARANG']='AVG DAILY'+(pivot2['NAMA BARANG'].str.len().max()+22)*' '
 st.dataframe(pd.concat([pivot2,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)
 
-st.markdown('### ')
+st.write('')
+st.markdown('### Sales per Paket')
 pivot3 = df_paket[(df_paket['Nama Cabang'].isin(df_item['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['BULAN','NAMA BARANG'])[['Kuantitas']].sum().reset_index().pivot(index='NAMA BARANG', columns='BULAN', values='Kuantitas').reset_index().fillna(0)
 total = pd.DataFrame((pivot3.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot3.columns)-1),columns=pivot3.columns[1:])
 total['NAMA BARANG']='TOTAL'+(pivot3['NAMA BARANG'].str.len().max()+25)*' '

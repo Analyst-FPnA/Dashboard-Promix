@@ -100,7 +100,8 @@ def format_number(x):
     if isinstance(x, (int, float)):
         return "{:,.0f}".format(x)
     return x
-    
+
+st.markdown('### Sales per Cabang')
 pivot1 = df_item[(df_item['Master Kategori'].isin((df_item['Master Kategori'].unique() if kategori=='ALL' else [kategori])))].groupby(['BULAN','Nama Cabang'])[['Kuantitas']].sum().reset_index().pivot(index=['Nama Cabang'], columns=['BULAN'], values='Kuantitas').reset_index()
 total = pd.DataFrame((pivot1.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
 total['Nama Cabang']='TOTAL'+(pivot1['Nama Cabang'].str.len().max()+25)*' '

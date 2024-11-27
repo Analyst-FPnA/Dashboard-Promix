@@ -125,7 +125,7 @@ total['NAMA BARANG']='AVG DAILY'+(pivot2['NAMA BARANG'].str.len().max()+22)*' '
 st.dataframe(pd.concat([pivot2,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot2.columns[1:]), use_container_width=True, hide_index=True)
 
 st.markdown('### ')
-pivot3 = df_paket[(df_paket['Nama Cabang'].isin(df_item['Nama Cabang'].unique() if cabang=='ALL' else [cabang])) & (df_paket['Master Kategori'].isin((df_paket['Master Kategori'].unique() if kategori=='ALL' else [kategori])))].groupby(['BULAN','NAMA BARANG'])[['Kuantitas']].sum().reset_index().pivot(index='NAMA BARANG', columns='BULAN', values='Kuantitas').reset_index().fillna(0)
+pivot3 = df_paket[(df_paket['Nama Cabang'].isin(df_item['Nama Cabang'].unique() if cabang=='ALL' else [cabang]))].groupby(['BULAN','NAMA BARANG'])[['Kuantitas']].sum().reset_index().pivot(index='NAMA BARANG', columns='BULAN', values='Kuantitas').reset_index().fillna(0)
 total = pd.DataFrame((pivot3.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot3.columns)-1),columns=pivot3.columns[1:])
 total['NAMA BARANG']='TOTAL'+(pivot3['NAMA BARANG'].str.len().max()+25)*' '
 st.dataframe(pd.concat([pivot3,total])[:-1].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot3.columns[1:]), use_container_width=True, hide_index=True)

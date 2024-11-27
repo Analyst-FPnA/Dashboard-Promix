@@ -91,6 +91,8 @@ df_cab = pd.read_csv('daftar_gudang.csv')
 df_item['Tanggal'] = pd.to_datetime(df_item['BULAN'], format='%B %Y')
 df_item['BULAN'] = pd.Categorical(df_item['BULAN'], categories=df_item.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
 
+df_paket['Tanggal'] = pd.to_datetime(df_paket['BULAN'], format='%B %Y')
+df_paket['BULAN'] = pd.Categorical(df_paket['BULAN'], categories=df_paket.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
 
 def format_number(x):
     if x==0:

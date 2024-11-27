@@ -100,7 +100,7 @@ def format_number(x):
         return "{:,.0f}".format(x)
     return x
     
-pivot1 = df_merge.groupby(['BULAN','Nama Cabang'])[['Kuantitas']].sum().reset_index().pivot(index=['Nama Cabang'], columns=['BULAN'], values='Kuantitas').reset_index()
+pivot1 = df_item.groupby(['BULAN','Nama Cabang'])[['Kuantitas']].sum().reset_index().pivot(index=['Nama Cabang'], columns=['BULAN'], values='Kuantitas').reset_index()
 total = pd.DataFrame((pivot1.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
 total['Nama Cabang']='TOTAL'+(pivot1['Nama Cabang'].str.len().max()+25)*' '
 st.dataframe(pd.concat([pivot1,total])[:-1].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)

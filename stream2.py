@@ -73,9 +73,13 @@ if 'df_item' not in locals():
         df_all = pd.concat(df_all, ignore_index=True)
         
 st.title('Dashboard - Promix (WEBSMART)')
-metrik = st.selectbox("SALES/CANCEL NOTA:", ['SALES','CANCEL NOTA'], index=0)
-total = st.selectbox("TOTAL:", ['KUANTITAS','HARGA'] if metrik == 'SALES' else ['KUANTITAS','NOTA','HARGA'], index=0)
-kategori = st.selectbox("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE','PACKAGING'] if total=='KUANTITAS' else ['ALL'], index=0)
+col = st.columns(3)
+with col[0]:
+    metrik = st.selectbox("SALES/CANCEL NOTA:", ['SALES','CANCEL NOTA'], index=0)
+with col[1]:
+    total = st.selectbox("TOTAL:", ['KUANTITAS','HARGA'] if metrik == 'SALES' else ['KUANTITAS','NOTA','HARGA'], index=0)
+with col[2]:
+    kategori = st.selectbox("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE','PACKAGING'] if total=='KUANTITAS' else ['ALL'], index=0)
 days_in_month = {
     'January': 31,
     'February': 28,  # untuk tahun non-kabisat

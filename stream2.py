@@ -131,7 +131,7 @@ if total=='KUANTITAS':
     total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max()+22)*' '
     st.dataframe(pd.concat([pivot1,total])[-1:].style.format(lambda x: '' if x==0 else format_number(x)).background_gradient(cmap='Reds', axis=1, subset=pivot1.columns[1:]), use_container_width=True, hide_index=True)
 
-    st.markdown('### ')
+    st.write('')
     st.markdown('### Sales per Item')
     cabang = st.selectbox("CABANG:", ['ALL']+df_item['Nama Cabang'].unique().tolist(), index=0)
     

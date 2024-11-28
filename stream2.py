@@ -116,7 +116,7 @@ def format_number(x):
         return "{:,.0f}".format(x)
     return x
 
-st.write('')
+st.markdown('### ')
 st.markdown('### Sales per Cabang')
 
 

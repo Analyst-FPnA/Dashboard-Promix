@@ -68,6 +68,7 @@ if 'df_item' not in locals():
         
 st.title('Dashboard - Promix (WEBSMART)')
 metrik = st.selectbox("SALES/CANCEL NOTA:", ['SALES','CANCEL NOTA'], index=0)
+total = st.selectbox("TOTAL:", ['KUANTITAS','HARGA'] if metrik == 'SALES' else ['KUANTITAS','NOTA','HARGA'], index=0)
 kategori = st.selectbox("KATEGORI:", ['ALL','BEVERAGES','DIMSUM','MIE','PACKAGING'], index=0)
 days_in_month = {
     'January': 31,

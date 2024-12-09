@@ -57,7 +57,7 @@ if 'df_item' not in locals():
                 with z.open(file_name) as f:
                     df_mie.append(pd.read_csv(f))
         # Menggabungkan semua DataFrame menjadi satu
-        df_mie = pd.concat(df_sales, ignore_index=True)
+        df_mie = pd.concat(df_mie, ignore_index=True)
         
 st.title('Dashboard - Promix (WEBSMART)')
 

@@ -109,4 +109,4 @@ df_mie2['Tanggal'] = pd.to_datetime(df_mie2['BULAN'], format='%B %Y')
 df_mie2['BULAN'] = pd.Categorical(df_mie2['BULAN'], categories=df_mie2.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
 df_mie2 = df_mie2.sort_values('BULAN').T
 df_mie2.columns = df_mie2.iloc[0,:]
-st.dataframe(df_mie2.iloc[[1,2,3],:], use_container_width=True, hide_index=True)
+st.dataframe(df_mie2.iloc[[1,2,3],:].reset_index().rename(columns={'index':'BULAN'}), use_container_width=True, hide_index=True)

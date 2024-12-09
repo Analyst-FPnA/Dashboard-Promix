@@ -54,6 +54,8 @@ if 'df_item' not in locals():
         for file_name in z.namelist():
           # Memeriksa apakah file tersebut berformat CSV
             if file_name.startswith('df_sales'):
+                with z.open(file_name) as f:
+                    df_mie.append(pd.read_csv(f))
         # Menggabungkan semua DataFrame menjadi satu
         df_mie = pd.concat(df_sales, ignore_index=True)
         

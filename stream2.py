@@ -95,3 +95,18 @@ for month in total.columns.drop(['Nama Cabang']):
         total[month]=total[month][0] / days_in_month[month[:-5]]
 total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max()+22)*' '
 st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()])
+
+df_mie = df_mie.merge(df_days, how='left')
+df_mie['AVG_SALES(-Cancel nota)'] = df_mie['Kuantitas'] / df_mie['days'] 
+
+df_mie2 = df_mie[df_mie['QTY']!=0].groupby('BULAN')[['Nama Cabang']].nunique().rename(columns={'Nama Cabang':'Total Cabang'}).reset_index().merge(df_mie[df_mie['AVG_SALES(-Cancel nota)']>=4400].groupby(['BULAN'])[['Nama Cabang']].nunique().reset_index().rename(columns={'Nama Cabang':'Total Cabang Achieve'}), how='left'    
+)
+df_mie2['%'] = round((df_mie2['Total Cabang Achieve'] / df_mie2['Total Cabang']) *100,2)
+
+df_mie2 = df_mie2[df_mie2['BULAN'].str.contains('2024')]
+
+df_mie2['Tanggal'] = pd.to_datetime(df_mie2['BULAN'], format='%B %Y')
+df_mie2['BULAN'] = pd.Categorical(df_mie2['BULAN'], categories=df_mie2.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
+df_mie2 = df_mie2.sort_values('BULAN').T
+df_mie2.columns = df_mie2.iloc[0,:]
+st.dataframe(df_mie2.iloc[[1,2,3],:])

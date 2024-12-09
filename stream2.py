@@ -87,14 +87,14 @@ df_mie['Tanggal'] = pd.to_datetime(df_mie['Tanggal'])
 df_mie['BULAN'] = pd.Categorical(df_mie['BULAN'], categories=df_mie.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
 
 pivot1=df_mie.pivot(index='Nama Cabang', columns='BULAN', values='Kuantitas').reset_index()
-st.dataframe(pivot1)
+st.dataframe(pivot1, use_container_width=True, hide_index=True)
 total = pd.DataFrame((pivot1.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
 total['Nama Cabang'] ='TOTAL'
-st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()])
+st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()], use_container_width=True, hide_index=True)
 for month in total.columns.drop(['Nama Cabang']):
         total[month]=total[month][0] / days_in_month[month[:-5]]
 total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max()+22)*' '
-st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()])
+st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()], use_container_width=True, hide_index=True)
 
 df_mie = df_mie.merge(df_days, how='left')
 df_mie['AVG_SALES(-Cancel nota)'] = df_mie['Kuantitas'] / df_mie['days'] 
@@ -109,4 +109,4 @@ df_mie2['Tanggal'] = pd.to_datetime(df_mie2['BULAN'], format='%B %Y')
 df_mie2['BULAN'] = pd.Categorical(df_mie2['BULAN'], categories=df_mie2.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
 df_mie2 = df_mie2.sort_values('BULAN').T
 df_mie2.columns = df_mie2.iloc[0,:]
-st.dataframe(df_mie2.iloc[[1,2,3],:])
+st.dataframe(df_mie2.iloc[[1,2,3],:], use_container_width=True, hide_index=True)

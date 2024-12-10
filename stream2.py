@@ -85,7 +85,7 @@ df_days.loc[df_days[df_days['BULAN']=='February 2024'].index,'days'] = 29
 
 df_mie['Tanggal'] = pd.to_datetime(df_mie['Tanggal'])
 df_mie['BULAN'] = pd.Categorical(df_mie['BULAN'], categories=df_mie.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
-
+df_mie = df_mie[df_mie['BULAN']>='2024-01-01']
 pivot1=df_mie.pivot(index='Nama Cabang', columns='BULAN', values='Kuantitas').reset_index()
 st.dataframe(pivot1, use_container_width=True, hide_index=True)
 total = pd.DataFrame((pivot1.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])

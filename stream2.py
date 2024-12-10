@@ -93,7 +93,7 @@ total['Nama Cabang'] ='TOTAL'
 st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()], use_container_width=True, hide_index=True)
 for month in total.columns.drop(['Nama Cabang']):
         total[month]=total[month][0] / days_in_month[month[:-5]]
-total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max()+22)*' '
+total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max())*' '
 st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()], use_container_width=True, hide_index=True)
 
 df_mie = df_mie.merge(df_days, how='left')

@@ -91,9 +91,17 @@ st.dataframe(pivot1, use_container_width=True, hide_index=True)
 total = pd.DataFrame((pivot1.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
 total['Nama Cabang'] ='TOTAL'
 st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()], use_container_width=True, hide_index=True)
-for month in total.columns.drop(['Nama Cabang']):
-        total[month]=total[month][0] / days_in_month[month[:-5]]
-total['Nama Cabang']='AVG DAILY'+(pivot1['Nama Cabang'].str.len().max())*' '
+df_mie3 = df_mie.merge(df_days, how='left')
+#df_mie3['AVG_SALES'] = df_mie3['QTY'] / df_mie3['days'] 
+df_mie3['AVG_SALES(-Cancel nota)'] = df_mie3['Kuantitas'] / df_mie3['days'] 
+
+df_mie3['Tanggal'] = pd.to_datetime(df_mie3['BULAN'], format='%B %Y')
+df_mie3['BULAN'] = pd.Categorical(df_mie3['BULAN'], categories=df_mie3.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
+
+pivot1 = df_mie3[(df_mie3['BULAN'].str.contains('2024')) & (df_mie3['QTY']>0)].pivot(index='CABANG',columns='BULAN',values='AVG_SALES(-Cancel nota)').reset_index()
+total = pd.DataFrame((pivot1.iloc[:,1:].mean(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
+total['CABANG']='AVG DAILY'+(pivot1['CABANG'].str.len().max()+22)*' '
+
 st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()], use_container_width=True, hide_index=True)
 
 df_mie = df_mie.merge(df_days, how='left')

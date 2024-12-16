@@ -99,7 +99,7 @@ df_mie3['AVG_SALES(-Cancel nota)'] = df_mie3['Kuantitas'] / df_mie3['days']
 df_mie3['Tanggal'] = pd.to_datetime(df_mie3['BULAN'], format='%B %Y')
 df_mie3['BULAN'] = pd.Categorical(df_mie3['BULAN'], categories=df_mie3.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
 
-pivot1 = df_mie3[(df_mie3['BULAN'].str.contains('2024')) & (df_mie3['QTY']>0)].pivot(index='CABANG',columns='BULAN',values='AVG_SALES(-Cancel nota)').reset_index()
+pivot1 = df_mie3[(df_mie3['BULAN'].str.contains('2024')) & (df_mie3['Kuantitas']>0)].pivot(index='CABANG',columns='BULAN',values='AVG_SALES(-Cancel nota)').reset_index()
 total = pd.DataFrame((pivot1.iloc[:,1:].mean(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
 total['CABANG']='AVG DAILY'+(pivot1['CABANG'].str.len().max()+22)*' '
 
@@ -108,7 +108,7 @@ st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()], use_
 df_mie = df_mie.merge(df_days, how='left')
 df_mie['AVG_SALES(-Cancel nota)'] = df_mie['Kuantitas'] / df_mie['days'] 
 
-df_mie2 = df_mie[df_mie['QTY']!=0].groupby('BULAN')[['Nama Cabang']].nunique().rename(columns={'Nama Cabang':'Total Cabang'}).reset_index().merge(df_mie[df_mie['AVG_SALES(-Cancel nota)']>=4400].groupby(['BULAN'])[['Nama Cabang']].nunique().reset_index().rename(columns={'Nama Cabang':'Total Cabang Achieve'}), how='left'    
+df_mie2 = df_mie[df_mie['Kuantitas']!=0].groupby('BULAN')[['Nama Cabang']].nunique().rename(columns={'Nama Cabang':'Total Cabang'}).reset_index().merge(df_mie[df_mie['AVG_SALES(-Cancel nota)']>=4400].groupby(['BULAN'])[['Nama Cabang']].nunique().reset_index().rename(columns={'Nama Cabang':'Total Cabang Achieve'}), how='left'    
 )
 df_mie2['%'] = round((df_mie2['Total Cabang Achieve'] / df_mie2['Total Cabang']) *100,2)
 

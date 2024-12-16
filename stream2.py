@@ -88,7 +88,7 @@ df_mie['Tanggal'] = pd.to_datetime(df_mie['BULAN'], format='%B %Y')
 df_mie['BULAN'] = pd.Categorical(df_mie['BULAN'], categories=df_mie.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
 df_mie = df_mie[df_mie['BULAN']>='January 2024']
 pivot1=df_mie.pivot(index='Nama Cabang', columns='BULAN', values='Kuantitas').reset_index()
-st.dataframe(pivot1, use_container_width=True, hide_index=True)
+st.dataframe(pivot1.fillna(0), use_container_width=True, hide_index=True)
 total = pd.DataFrame((pivot1.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
 total['Nama Cabang'] ='TOTAL'
 st.dataframe(total.loc[:,[total.columns[-1]]+total.columns[:-1].to_list()], use_container_width=True, hide_index=True)

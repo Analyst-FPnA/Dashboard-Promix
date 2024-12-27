@@ -22,7 +22,7 @@ def download_file_from_google_drive(file_id, dest_path):
         gdown.download(url, dest_path, quiet=False)
         
 download_file_from_google_drive('1EDWQJXuYu34WZNcZOx1WXqxOEwq_QKug', 'downloaded_file.zip')
-download_file_from_google_drive('14a4HmKACWics1ObPevlF0BXG1gVFShn_', 'daftar_gudang.csv')
+download_file_from_google_drive('1e25qJ5HQiz0I_v77NGsKM3uTxUuOgBEW', 'daftar_gudang.csv')
 
 if 'df_2205' not in locals():
     with zipfile.ZipFile(f'downloaded_file.zip', 'r') as z:

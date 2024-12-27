@@ -13,40 +13,14 @@ import plotly.graph_objs as go
 import streamlit as st
 
 st.set_page_config(layout="wide")
-def download_file_from_github(url, save_path):
-    response = requests.get(url)
-    if response.status_code == 200:
-        with open(save_path, 'wb') as file:
-            file.write(response.content)
-        print(f"File downloaded successfully and saved to {save_path}")
-    else:
-        print(f"Failed to download file. Status code: {response.status_code}")
-
-
-def list_files_in_directory(dir_path):
-    # Fungsi untuk mencetak semua isi dari suatu direktori
-    for root, dirs, files in os.walk(dir_path):
-        st.write(f'Direktori: {root}')
-        for file_name in files:
-            st.write(f'  - {file_name}')
-
-# URL file model .pkl di GitHub (gunakan URL raw dari file .pkl di GitHub)
-url = 'https://raw.githubusercontent.com/Analyst-FPnA/Dashboard-Promix/main/daftar_gudang.csv'
-
-# Path untuk menyimpan file yang diunduh
-save_path = 'daftar_gudang.csv'
-
-# Unduh file dari GitHub
-download_file_from_github(url, save_path)
 
 def download_file_from_google_drive(file_id, dest_path):
     if not os.path.exists(dest_path):
         url = f"https://drive.google.com/uc?id={file_id}"
         gdown.download(url, dest_path, quiet=False)
-        
-file_id = '14a4HmKACWics1ObPevlF0BXG1gVFShn_'
-dest_path = f'downloaded_file.zip'
-download_file_from_google_drive(file_id, dest_path)
+
+download_file_from_google_drive('14a4HmKACWics1ObPevlF0BXG1gVFShn_', 'downloaded_file.zip')
+download_file_from_google_drive('1e25qJ5HQiz0I_v77NGsKM3uTxUuOgBEW', 'daftar_gudang.csv')
 
 if 'df_item' not in locals():
     with zipfile.ZipFile(f'downloaded_file.zip', 'r') as z:

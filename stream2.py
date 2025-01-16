@@ -51,16 +51,17 @@ days_in_month = {
 }
 
 df_days = pd.DataFrame([days_in_month]).T.reset_index().rename(columns={'index':'BULAN',0:'days'})
-df_days['BULAN'] = df_days['BULAN']+'-23'
+df_days['BULAN'] = df_days['BULAN']+' 2023'
 df_days2 = df_days.copy()
-df_days2['BULAN'] = df_days2['BULAN'].str.replace('23','24')
+df_days2['BULAN'] = df_days2['BULAN'].str.replace('2023','2024')
 df_days = pd.concat([df_days,df_days2]) 
-df_days.loc[df_days[df_days['BULAN']=='Feb-24'].index,'days'] = 29
+df_days.loc[df_days[df_days['BULAN']=='February 2024'].index,'days'] = 29
 
 df_mie = df_mie.groupby(['BULAN','CABANG','Nama Cabang'])[['Kuantitas']].sum().reset_index()
-df_mie['Tanggal'] = pd.to_datetime(df_mie['BULAN'], format='%b-%y')
+df_mie
+df_mie['Tanggal'] = pd.to_datetime(df_mie['BULAN'], format='%B %Y')
 df_mie['BULAN'] = pd.Categorical(df_mie['BULAN'], categories=df_mie.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
-df_mie = df_mie[df_mie['BULAN']>='Jan-24']
+df_mie = df_mie[df_mie['BULAN']>='January 2024']
 pivot1=df_mie.pivot(index='Nama Cabang', columns='BULAN', values='Kuantitas').reset_index()
 st.dataframe(pivot1.fillna(0), use_container_width=True, hide_index=True)
 total = pd.DataFrame((pivot1.iloc[:,1:].sum(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
@@ -70,10 +71,10 @@ df_mie3 = df_mie.merge(df_days, how='left')
 #df_mie3['AVG_SALES'] = df_mie3['QTY'] / df_mie3['days'] 
 df_mie3['AVG_SALES(-Cancel nota)'] = df_mie3['Kuantitas'] / df_mie3['days'] 
 
-df_mie3['Tanggal'] = pd.to_datetime(df_mie3['BULAN'], format='%b-%y')
+df_mie3['Tanggal'] = pd.to_datetime(df_mie3['BULAN'], format='%B %Y')
 df_mie3['BULAN'] = pd.Categorical(df_mie3['BULAN'], categories=df_mie3.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
 
-pivot1 = df_mie3[(df_mie3['BULAN'].str.contains('24')) & (df_mie3['Kuantitas']>0)].pivot(index='CABANG',columns='BULAN',values='AVG_SALES(-Cancel nota)').reset_index()
+pivot1 = df_mie3[(df_mie3['BULAN'].str.contains('2024')) & (df_mie3['Kuantitas']>0)].pivot(index='CABANG',columns='BULAN',values='AVG_SALES(-Cancel nota)').reset_index()
 total = pd.DataFrame((pivot1.iloc[:,1:].mean(axis=0).values).reshape(1,len(pivot1.columns)-1),columns=pivot1.columns[1:])
 total['CABANG']='AVG DAILY'+(pivot1['CABANG'].str.len().max()+22)*' '
 
@@ -86,9 +87,9 @@ df_mie2 = df_mie[df_mie['Kuantitas']!=0].groupby('BULAN')[['Nama Cabang']].nuniq
 )
 df_mie2['%'] = round((df_mie2['Total Cabang Achieve'] / df_mie2['Total Cabang']) *100,2)
 
-df_mie2 = df_mie2[df_mie2['BULAN'].str.contains('24')]
+df_mie2 = df_mie2[df_mie2['BULAN'].str.contains('2024')]
 
-df_mie2['Tanggal'] = pd.to_datetime(df_mie2['BULAN'], format='%b-%y')
+df_mie2['Tanggal'] = pd.to_datetime(df_mie2['BULAN'], format='%B %Y')
 df_mie2['BULAN'] = pd.Categorical(df_mie2['BULAN'], categories=df_mie2.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
 df_mie2 = df_mie2.sort_values('BULAN').T
 df_mie2.columns = df_mie2.iloc[0,:]

@@ -58,7 +58,6 @@ df_days = pd.concat([df_days,df_days2])
 df_days.loc[df_days[df_days['BULAN']=='February 2024'].index,'days'] = 29
 
 df_mie = df_mie.groupby(['BULAN','CABANG','Nama Cabang'])[['Kuantitas']].sum().reset_index()
-df_mie
 df_mie['BULAN'] = pd.to_datetime(df_mie['BULAN'], format='%b-%y').dt.strftime('%B %Y')
 df_mie['Tanggal'] = pd.to_datetime(df_mie['BULAN'], format='%B %Y')
 df_mie['BULAN'] = pd.Categorical(df_mie['BULAN'], categories=df_mie.sort_values('Tanggal')['BULAN'].unique(), ordered=True)
